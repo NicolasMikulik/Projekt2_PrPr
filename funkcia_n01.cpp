@@ -15,7 +15,7 @@ typedef struct node {
 int main()
 {
 	node_t * head=NULL, *begin=NULL, *insert=NULL;
-	int i;
+	int i=0;
 	char s[40];
 	FILE *f=NULL;
 	
@@ -46,6 +46,7 @@ int main()
 	}
 	begin->next=NULL;
 	begin=head->next;
+	
 	insert=(node_t*)malloc(sizeof(node_t));
 	insert->next=NULL;
 	scanf("%s",insert->kategoria);
@@ -57,7 +58,54 @@ int main()
 	
 	insert->next=begin->next;
 	begin->next=insert;
-	printf("%s",begin->next->znacka);
+	begin=begin->next;
+	begin=begin->next;
+	printf("%s\n",head->znacka);
+	printf("%s\n",begin->znacka);
+	
+	begin=head;
+	while(begin->next!=NULL)
+	{
+		printf("%d.",++i);
+		printf("%s",begin->kategoria);
+		printf("%s",begin->znacka);
+		printf("%s",begin->predajca);
+		printf("%d\n",begin->cena);
+		printf("%d\n",begin->vyrobene);
+		printf("%s",begin->stav);
+		begin=begin->next;
+	}
+	
+	begin=head;
+	while(begin->next!=NULL)
+		begin=begin->next;
+	insert=begin->next;
+	insert=(node_t*)malloc(sizeof(node_t));
+	insert->next=NULL;
+	scanf("%s",insert->kategoria);
+	scanf("%s",insert->znacka);
+	scanf("%s",insert->predajca);
+	scanf("%d",&insert->cena);
+	scanf("%d",&insert->vyrobene);
+	scanf("%s",insert->stav);
+	
+	begin=head->next;
+	insert->next=begin->next;
+	begin->next=insert;
+
+	begin=head;
+	while(begin->next!=NULL)
+	{
+		printf("%d.",++i);
+		printf("%s",begin->kategoria);
+		printf("%s",begin->znacka);
+		printf("%s",begin->predajca);
+		printf("%d\n",begin->cena);
+		printf("%d\n",begin->vyrobene);
+		printf("%s",begin->stav);
+		begin=begin->next;
+	}
+	
 	while((begin=head)!=NULL)
 	{
 		head=head->next;
