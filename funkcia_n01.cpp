@@ -14,7 +14,7 @@ typedef struct node {
 
 int main()
 {
-	node_t * head=NULL, *begin=NULL;
+	node_t * head=NULL, *begin=NULL, *insert=NULL;
 	int i;
 	char s[40];
 	FILE *f=NULL;
@@ -44,15 +44,26 @@ int main()
 		begin->next=(node_t*)malloc(sizeof(node_t));
 		begin=begin->next;
 	}
-	
 	begin->next=NULL;
+	begin=head->next;
+	insert=(node_t*)malloc(sizeof(node_t));
+	insert->next=NULL;
+	scanf("%s",insert->kategoria);
+	scanf("%s",insert->znacka);
+	scanf("%s",insert->predajca);
+	scanf("%d",&insert->cena);
+	scanf("%d",&insert->vyrobene);
+	scanf("%s",insert->stav);
+	
+	insert->next=begin->next;
+	begin->next=insert;
+	printf("%s",begin->next->znacka);
 	while((begin=head)!=NULL)
 	{
 		head=head->next;
 		free(begin);
 	}
-	//free(head);
-	
+	free(insert);
 	fclose(f);
 	
 	return 0;
