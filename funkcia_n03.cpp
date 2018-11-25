@@ -97,20 +97,20 @@ void deleteNode(struct Node **head_ref)
     strupr(subs);
     /*printf("%s\n",subs);*/  
 
-	/*strcpy(doms,temp->znacka);
+	strcpy(doms,(*head_ref)->znacka);
   	strupr(doms);
   	/*if(strcmp(subs,doms)==0)
   	{
   		*head_ref=(*head_ref)->next;
   		free(temp);
   		return;
-	}
+	}*/
 	if(porovnaj(doms,subs)==1)
   	{
   		*head_ref=(*head_ref)->next;
   		free(temp);
   		return;
-	}*/
+	}
   	while(temp!=NULL)
   	{	
   		strcpy(doms,temp->znacka);
