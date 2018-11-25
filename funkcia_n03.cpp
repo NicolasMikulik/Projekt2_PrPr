@@ -106,12 +106,6 @@ void deleteNode(struct Node **head_ref)
 
 	strcpy(doms,(*head_ref)->znacka);
   	strupr(doms);
-  	/*if(strcmp(subs,doms)==0)
-  	{
-  		*head_ref=(*head_ref)->next;
-  		free(temp);
-  		return;
-	}*/
 	if(strstr(doms,subs))
   	{
   		*head_ref=(*head_ref)->next;
@@ -133,7 +127,68 @@ void deleteNode(struct Node **head_ref)
 		temp=temp->next;
 	}
 } 
+
+void h(struct Node *node) 
+{ 
+	struct Node *current=node;
+	int i=0, wish;
+	char subs[55], doms[55];
+	scanf("%s",subs);
+    strupr(subs);
+	scanf("%d",&wish);
+    while (current != NULL) 
+    { 
+    	strcpy(doms,current->znacka);
+  		strupr(doms);
+  		printf("%s\n",doms);
+  		if(strstr(doms,subs))
+  			if(wish<=(current->cena))
+		{
+    	printf("%d.\n", ++i);
+    	printf("%s\n", current->kategoria);
+    	printf("%s\n", current->znacka);
+    	printf("%s\n", current->predajca);
+        printf("%d\n", current->cena);
+		printf("%d\n", current->vyrobene);
+		printf("%s\n", current->stav);
+		}
+        current = current->next; 
+    }
+    printf("\n");
+} 
+/*void h(struct Node *head_ref) 
+{ 
+   	char subs[55], doms[55];
+   	int wish, i=0;
+   	struct Node* current = head_ref;
+   	
+	if (head_ref == NULL) 
+    return; 
   
+  	scanf("%s",subs);
+    strupr(subs);
+	scanf("%d",&wish);
+  	while(current!=NULL)
+  	{	
+  		strcpy(doms,current->znacka);
+  		strupr(doms);
+  		printf("%s\n",doms);
+  		if(strstr(doms,subs))
+  			if(wish<=(current->cena))
+			{
+			printf("%d.\n", ++i);
+	    	printf("%s\n", current->kategoria);
+	    	printf("%s\n", current->znacka);
+	    	printf("%s\n", current->predajca);
+	        printf("%d\n", current->cena);
+			printf("%d\n", current->vyrobene);
+			printf("%s\n", current->stav);
+			}
+		current=current->next;
+	}
+}*/
+
+
 // This function prints contents of linked list starting from 
 // the given node 
 void printList(struct Node *node) 
@@ -185,6 +240,7 @@ int main()
 		scanf("%s",hs);
 		if(hs[0]=='p') push(&head, f); 
 		if(hs[0]=='v') printList(head);
+		if(hs[0]=='h') h(head);
 		if(hs[0]=='z') deleteNode(&head);
 		if(hs[0]=='k') freeAll(head,f,&w);
 	}
