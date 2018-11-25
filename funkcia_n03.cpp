@@ -18,6 +18,13 @@ struct Node
    and an int, inserts a new node on the front of the list. */
 void push(struct Node** head_ref, FILE *f) 
 { 
+	struct Node *current = NULL;
+
+    while ((current = (*head_ref)) != NULL)
+    {
+        (*head_ref) = (*head_ref)->next;
+        free(current);
+    }
 	char s[51];
 	fseek(f,0,SEEK_SET);
 	while((fgets(s,50,f))!=NULL)
