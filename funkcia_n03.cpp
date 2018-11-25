@@ -20,7 +20,7 @@ void push(struct Node** head_ref, FILE *f)
 { 
 	char s[51];
 
-	if((fgets(s,50,f))!=NULL)
+	while((fgets(s,50,f))!=NULL)
     {	
 		struct Node* new_node = (struct Node*) malloc(sizeof(struct Node));
 	
@@ -102,10 +102,11 @@ void printList(struct Node *node)
     { 
         printf(" %d ", node->cena); 
         node = node->next; 
-    } 
+    }
+    printf("\n");
 } 
 
-void freeAll(struct Node *head, FILE *f)
+void freeAll(struct Node *head, FILE *f, int *w)
 {
     struct Node *current = NULL;
 
@@ -116,6 +117,7 @@ void freeAll(struct Node *head, FILE *f)
     }
     if(f!=NULL)
     fclose(f);
+    *w=0;
 }
  
 /* Drier program to test above functions*/
@@ -135,8 +137,6 @@ int main()
 		scanf("%s",hs);
 		if(hs[0]=='p')
 		{
-		push(&head, f);
-		push(&head, f);
 		push(&head, f); 
 	    puts("\nCreated Linked List: "); 
 	    printList(head); 
@@ -147,14 +147,7 @@ int main()
 		
 		if(hs[0]=='k')
 		{
-		freeAll(head,f);
-		/*while((new_node=head)!=NULL)
-		{
-			head=head->next;
-			free(new_node);
-		}
-		fclose(f);*/
-		w=0;
+		freeAll(head,f,&w);
 		}
 	}
     
