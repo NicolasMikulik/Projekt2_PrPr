@@ -98,10 +98,18 @@ void deleteNode(struct Node **head_ref, int position)
 // the given node 
 void printList(struct Node *node) 
 { 
-    while (node != NULL) 
+	struct Node *current=node;
+	int i=0;
+    while (current != NULL) 
     { 
-        printf(" %d ", node->cena); 
-        node = node->next; 
+    	printf("%d.\n", ++i);
+    	printf("%s\n", current->kategoria);
+    	printf("%s\n", current->znacka);
+    	printf("%s\n", current->predajca);
+        printf("%d\n", current->cena);
+		printf("%d\n", current->vyrobene);
+		printf("%s\n", current->stav);  
+        current = current->next; 
     }
     printf("\n");
 } 
