@@ -105,7 +105,7 @@ void deleteNode(struct Node **head_ref)
   		free(temp);
   		return;
 	}*/
-	if(porovnaj(doms,subs)==1)
+	if(strstr(doms,subs))
   	{
   		*head_ref=(*head_ref)->next;
   		free(temp);
@@ -113,11 +113,11 @@ void deleteNode(struct Node **head_ref)
 	}
   	while(temp!=NULL)
   	{	
-  		strcpy(doms,temp->znacka);
+  		strcpy(doms,temp->next->znacka);
   		strupr(doms);
-  		if(porovnaj(doms,subs)==1)
+  		if(strstr(doms,subs))
   		{
-			printf("%s\n",temp->znacka);
+			printf("%s\n",temp->next->znacka);
 			freepop=temp->next;
 			temp->next=freepop->next;
 			free(freepop);
