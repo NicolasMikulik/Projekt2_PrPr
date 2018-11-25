@@ -66,11 +66,25 @@ void push(struct Node** head_ref, FILE *f)
     return; 
 } */
   
+int porovnaj(char *s1, char *s2)
+{
+	int sublen=0,domlen=0,i,j,zhoda=0;
+	sublen=strlen(s2);
+	domlen=strlen(s1);
+	printf("%s %s\n", s1, s2);
+	for(i=0;i<domlen;i++)
+	{
+		zhoda=0;
+		for(j=0;j<sublen;j++)
+			if(s1[i]==s2[j])zhoda++;
+	}
+	if(zhoda==sublen)return 1;
+}
+  
 /* Given a reference (pointer to pointer) to the head of a list 
    and a position, deletes the node at the given position */
 void deleteNode(struct Node **head_ref) 
 { 
-	int sublen=0,domlen=0,i,j,zhoda=0;
    	char subs[55], doms[55];
    	
 	if (*head_ref == NULL) 
@@ -83,23 +97,29 @@ void deleteNode(struct Node **head_ref)
     strupr(subs);
     /*printf("%s\n",subs);*/  
 
-	strcpy(doms,temp->znacka);
+	/*strcpy(doms,temp->znacka);
   	strupr(doms);
-  	if(strcmp(subs,doms)==0)
+  	/*if(strcmp(subs,doms)==0)
   	{
   		*head_ref=(*head_ref)->next;
   		free(temp);
   		return;
 	}
-  	while(temp!=NULL)
+	if(porovnaj(doms,subs)==1)
   	{
-  		strcpy(doms,temp->next->znacka);
+  		*head_ref=(*head_ref)->next;
+  		free(temp);
+  		return;
+	}*/
+  	while(temp!=NULL)
+  	{	
+  		strcpy(doms,temp->znacka);
   		strupr(doms);
-  		if(strcmp(subs,doms)==0)
+  		if(porovnaj(doms,subs)==1)
   		{
 			printf("%s\n",temp->znacka);
 			freepop=temp->next;
-			temp->next=temp->next->next;
+			temp->next=freepop->next;
 			free(freepop);
 			break;
 		}
