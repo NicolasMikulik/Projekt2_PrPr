@@ -19,7 +19,7 @@ struct Node
 void push(struct Node** head_ref, FILE *f) 
 { 
 	char s[51];
-
+	fseek(f,0,SEEK_SET);
 	while((fgets(s,50,f))!=NULL)
     {	
 		struct Node* new_node = (struct Node*) malloc(sizeof(struct Node));
@@ -68,30 +68,43 @@ void push(struct Node** head_ref, FILE *f)
   
 /* Given a reference (pointer to pointer) to the head of a list 
    and a position, deletes the node at the given position */
-void deleteNode(struct Node **head_ref, int position) 
+void deleteNode(struct Node **head_ref) 
 { 
-   if (*head_ref == NULL) 
-      return; 
+	int sublen=0,domlen=0,i,j,zhoda=0;
+   	char subs[55], doms[55];
+   	
+	if (*head_ref == NULL) 
+    return; 
+    
+   	struct Node* temp = *head_ref;
+   	struct Node* freepop = *head_ref;
+  
+  	scanf("%s",subs);
+    strupr(subs);
+    /*printf("%s\n",subs);*/  
 
-   struct Node* temp = *head_ref; 
-  
-    if (position == 0) 
-    { 
-        *head_ref = temp->next;   // Change head 
-        free(temp);               // free old head 
-        return; 
-    } 
-  
-    for (int i=0; temp!=NULL && i<position-1; i++) 
-         temp = temp->next; 
-  
-    if (temp == NULL || temp->next == NULL) 
-         return; 
-
-    struct Node *next = temp->next->next;  
-    free(temp->next);  // Free memory 
-  
-    temp->next = next;  // Unlink the deleted node from list 
+	strcpy(doms,temp->znacka);
+  	strupr(doms);
+  	if(strcmp(subs,doms)==0)
+  	{
+  		*head_ref=(*head_ref)->next;
+  		free(temp);
+  		return;
+	}
+  	while(temp!=NULL)
+  	{
+  		strcpy(doms,temp->next->znacka);
+  		strupr(doms);
+  		if(strcmp(subs,doms)==0)
+  		{
+			printf("%s\n",temp->znacka);
+			freepop=temp->next;
+			temp->next=temp->next->next;
+			free(freepop);
+			break;
+		}
+		temp=temp->next;
+	}
 } 
   
 // This function prints contents of linked list starting from 
@@ -143,20 +156,10 @@ int main()
 	while(w==1)
 	{
 		scanf("%s",hs);
-		if(hs[0]=='p')
-		{
-		push(&head, f); 
-	    puts("\nCreated Linked List: "); 
-	    printList(head); 
-	    deleteNode(&head, 1); 
-	    puts("\nLinked List after Deletion at position 1: "); 
-	    printList(head);
-		}
-		
-		if(hs[0]=='k')
-		{
-		freeAll(head,f,&w);
-		}
+		if(hs[0]=='p') push(&head, f); 
+		if(hs[0]=='v') printList(head);
+		if(hs[0]=='z') deleteNode(&head);
+		if(hs[0]=='k') freeAll(head,f,&w);
 	}
     
     return 0; 
