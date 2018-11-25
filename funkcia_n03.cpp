@@ -142,7 +142,7 @@ void h(struct Node *node)
   		strupr(doms);
   		printf("%s\n",doms);
   		if(strstr(doms,subs))
-  			if(wish<=(current->cena))
+  			if(wish>=(current->cena))
 		{
     	printf("%d.\n", ++i);
     	printf("%s\n", current->kategoria);
@@ -156,38 +156,27 @@ void h(struct Node *node)
     }
     printf("\n");
 } 
-/*void h(struct Node *head_ref) 
+
+void a(struct Node **node) 
 { 
-   	char subs[55], doms[55];
-   	int wish, i=0;
-   	struct Node* current = head_ref;
-   	
-	if (head_ref == NULL) 
-    return; 
-  
-  	scanf("%s",subs);
+	struct Node *current=*node;
+	int i=0, rok;
+	char subs[55], doms[55];
+	scanf("%s",subs);
     strupr(subs);
-	scanf("%d",&wish);
-  	while(current!=NULL)
-  	{	
-  		strcpy(doms,current->znacka);
+	scanf("%d",&rok);
+    while (current != NULL) 
+    { 
+    	strcpy(doms,current->znacka);
   		strupr(doms);
   		printf("%s\n",doms);
-  		if(strstr(doms,subs))
-  			if(wish<=(current->cena))
-			{
-			printf("%d.\n", ++i);
-	    	printf("%s\n", current->kategoria);
-	    	printf("%s\n", current->znacka);
-	    	printf("%s\n", current->predajca);
-	        printf("%d\n", current->cena);
-			printf("%d\n", current->vyrobene);
-			printf("%s\n", current->stav);
-			}
-		current=current->next;
-	}
-}*/
-
+  		if(strstr(doms,subs)!=NULL)
+  			if(rok=(current->vyrobene))
+				current->cena-=100;
+        current = current->next; 
+    }
+    printf("\n");
+} 
 
 // This function prints contents of linked list starting from 
 // the given node 
@@ -241,6 +230,7 @@ int main()
 		if(hs[0]=='p') push(&head, f); 
 		if(hs[0]=='v') printList(head);
 		if(hs[0]=='h') h(head);
+		if(hs[0]=='a') a(&head);
 		if(hs[0]=='z') deleteNode(&head);
 		if(hs[0]=='k') freeAll(head,f,&w);
 	}
