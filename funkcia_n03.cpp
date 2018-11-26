@@ -16,16 +16,79 @@ struct Node
   
 /* Given a reference (pointer to pointer) to the head of a list 
    and an int, inserts a new node on the front of the list. */
-void push(struct Node** head_ref, FILE *f) 
+void push(struct Node** head_ref, FILE *f, int *pocet_zaznamov) 
 { 
 	struct Node *current = NULL;
-
+	
+	if((f=fopen("auta.txt","r"))==NULL)
+	{printf("Nepodarilo sa otvorit subor.\n");
+	exit(0);}
+	(*pocet_zaznamov)=0;
     while ((current = (*head_ref)) != NULL)
     {
         (*head_ref) = (*head_ref)->next;
         free(current);
     }
+    //(*head_ref) = (struct Node*) malloc(sizeof(struct Node));
+    current=(*head_ref);
 	char s[51];
+	fseek(f,0,SEEK_SET);
+	while((fgets(s,50,f))!=NULL)
+    {	
+		struct Node* new_node = (struct Node*) malloc(sizeof(struct Node));
+		(*pocet_zaznamov)++;
+		fgets(s,50,f);
+		s[strlen(s)-1]='\0';
+		strcpy(new_node->kategoria,s);
+		fgets(s,50,f);
+		s[strlen(s)-1]='\0';
+		strcpy(new_node->znacka,s);
+		fgets(s,50,f);
+		s[strlen(s)-1]='\0';
+		strcpy(new_node->predajca,s);
+		fgets(s,50,f);
+		new_node->cena=atoi(s);
+		fgets(s,50,f);
+		new_node->vyrobene=atoi(s);
+		fgets(s,50,f);
+		s[strlen(s)-1]='\0';
+		strcpy(new_node->stav,s);
+		printf("%s\n",new_node->znacka);
+	 	new_node->next=NULL;
+        
+        
+        if((*head_ref)==NULL)
+        {
+        	//new_node->next = (*head_ref); 
+	    	(*head_ref)    = new_node;
+	    	current=(*head_ref);
+		}
+		else
+		{
+		 	current->next=new_node;
+	 		current=current->next;
+		}
+	 	
+	    /*new_node->next = (*head_ref); 
+	    (*head_ref)    = new_node;*/
+	}
+	printf("Nacitalo sa %d zaznamov.\n", (*pocet_zaznamov));
+} 
+
+void append(struct Node** head_ref, FILE *f) 
+{ 
+    struct Node* new_node = (struct Node*) malloc(sizeof(struct Node)); 
+	struct Node* current;
+	 
+    while ((current = (*head_ref)) != NULL)
+    {
+        (*head_ref) = (*head_ref)->next;
+        free(current);
+    }
+    
+    struct Node *last = *head_ref; 
+
+    char s[51];
 	fseek(f,0,SEEK_SET);
 	while((fgets(s,50,f))!=NULL)
     {	
@@ -48,30 +111,10 @@ void push(struct Node** head_ref, FILE *f)
 		s[strlen(s)-1]='\0';
 		strcpy(new_node->stav,s);
 		printf("%s\n",new_node->znacka);
-	 
-	    new_node->next = (*head_ref); 
-	    (*head_ref)    = new_node;
 	}
-} 
-
-/*void append(struct Node** head_ref, int new_data) 
-{ 
-    struct Node* new_node = (struct Node*) malloc(sizeof(struct Node));  
-    struct Node *last = *head_ref; 
-
-    new_node->data  = new_data; 
-    new_node->next = NULL; 
-    if (*head_ref == NULL) 
-    { 
-       *head_ref = new_node; 
-       return; 
-    } 
-    while (last->next != NULL) 
-        last = last->next; 
-
-    last->next = new_node; 
+     
     return; 
-} */
+}
   
 int porovnaj(char *s1, char *s2)
 {
@@ -90,43 +133,45 @@ int porovnaj(char *s1, char *s2)
   
 /* Given a reference (pointer to pointer) to the head of a list 
    and a position, deletes the node at the given position */
-void deleteNode(struct Node **head_ref) 
+void deleteNode(struct Node **head_ref, int *pocet_zaznamov) 
 { 
    	char subs[55], doms[55];
+   	int i, wish;
+   	struct Node* temp = *head_ref;
+   	struct Node* freepop;
    	
 	if (*head_ref == NULL) 
-    return; 
-    
-   	struct Node* temp = *head_ref;
-   	struct Node* freepop = *head_ref;
-  
-  	scanf("%s",subs);
-    strupr(subs);
-    /*printf("%s\n",subs);*/  
-
+    return;
+  	scanf("%s %d",subs,&wish);
+    if(wish<=(*pocet_zaznamov))
+    {
+	strupr(subs);  
 	strcpy(doms,(*head_ref)->znacka);
   	strupr(doms);
-	if(strstr(doms,subs))
+  	printf("%s\n",subs);
+	if(strstr(doms,subs) && wish==1)
   	{
   		*head_ref=(*head_ref)->next;
   		free(temp);
+  		(*pocet_zaznamov)--;
   		return;
 	}
-  	while(temp!=NULL)
-  	{	
-  		strcpy(doms,temp->next->znacka);
-  		strupr(doms);
-  		if(strstr(doms,subs))
+	
+  	for(i=1;i<wish-1;i++)
+  		temp=temp->next;
+
+  	printf("%s\n",temp->znacka);
+  	strcpy(doms,temp->next->znacka);
+  	strupr(doms);
+  	if(strstr(doms,subs)!=NULL)
   		{
-			printf("%s\n",temp->next->znacka);
-			freepop=temp->next;
-			temp->next=freepop->next;
-			free(freepop);
-			break;
+  		freepop=temp->next;
+		temp->next=freepop->next;
+		free(freepop);
+		(*pocet_zaznamov)--;
 		}
-		temp=temp->next;
 	}
-} 
+}
 
 void h(struct Node *node) 
 { 
@@ -218,20 +263,16 @@ int main()
     struct Node* head = NULL, *new_node=NULL; 
     FILE *f=NULL;
     char hs[51];
-    int w=1;
+    int w=1, pocet_zaznamov=0;
     
-  	if((f=fopen("auta.txt","r"))==NULL)
-	{printf("Nepodarilo sa otvorit subor.\n");
-	exit(0);}
-	
 	while(w==1)
 	{
 		scanf("%s",hs);
-		if(hs[0]=='p') push(&head, f); 
+		if(hs[0]=='p') push(&head, f, &pocet_zaznamov); 
 		if(hs[0]=='v') printList(head);
 		if(hs[0]=='h') h(head);
 		if(hs[0]=='a') a(&head);
-		if(hs[0]=='z') deleteNode(&head);
+		if(hs[0]=='z') deleteNode(&head, &pocet_zaznamov);
 		if(hs[0]=='k') freeAll(head,f,&w);
 	}
     
