@@ -75,6 +75,56 @@ void push(struct Node** head_ref, FILE *f, int *pocet_zaznamov)
 	printf("Nacitalo sa %d zaznamov.\n", (*pocet_zaznamov));
 } 
 
+void add(struct Node **head_ref, int *pocet_zaznamov) 
+{
+	int poz,i=1;
+	struct Node* current=(*head_ref);
+	
+	scanf("%d",&poz);
+	if((*pocet_zaznamov)>0 && poz<=(*pocet_zaznamov)+1)
+	{
+		if(poz==1)
+		{
+			struct Node* new_node = (struct Node*) malloc(sizeof(struct Node)); 
+			strcpy(new_node->kategoria,"KAMION");
+			strcpy(new_node->znacka,"Audi");
+			strcpy(new_node->predajca,"Optimist Prime's Machine Boogaloo");
+			new_node->cena=15500;
+			new_node->vyrobene=2005;
+			strcpy(new_node->stav,"spalene ohnom ohnivo rychle");
+			new_node->next=(*head_ref);
+			(*head_ref)=new_node;
+			(*pocet_zaznamov)++;
+			printf("Zaznam pridany na poziciu %d \n",i);
+		}
+		else
+		{
+			while(current!=NULL)
+			{
+				if((poz-1)==i++)
+				{
+				struct Node* new_node = (struct Node*) malloc(sizeof(struct Node)); 
+				
+				strcpy(new_node->kategoria,"KAMION");
+				strcpy(new_node->znacka,"Nissan");
+				strcpy(new_node->predajca,"Negatron's landfill");
+				new_node->cena=13400;
+				new_node->vyrobene=2011;
+				strcpy(new_node->stav,"vyrobene zo sopecneho kamena");
+				
+				new_node->next=current->next;
+				current->next=new_node;
+				
+				(*pocet_zaznamov)++;
+				printf("Zaznam pridany na poziciu %d \n",i);
+				break;
+				}
+				current=current->next;	
+			}
+		}
+	}
+}
+
 void append(struct Node** head_ref, FILE *f) 
 { 
     struct Node* new_node = (struct Node*) malloc(sizeof(struct Node)); 
@@ -116,61 +166,42 @@ void append(struct Node** head_ref, FILE *f)
     return; 
 }
   
-int porovnaj(char *s1, char *s2)
-{
-	int sublen=0,domlen=0,i,j,zhoda=0;
-	sublen=strlen(s2);
-	domlen=strlen(s1);
-	printf("%s %s\n", s1, s2);
-	for(i=0;i<domlen;i++)
-	{
-		zhoda=0;
-		for(j=0;j<sublen;j++)
-			if(s1[i]==s2[j])zhoda++;
-	}
-	if(zhoda==sublen)return 1;
-}
-  
 /* Given a reference (pointer to pointer) to the head of a list 
    and a position, deletes the node at the given position */
 void deleteNode(struct Node **head_ref, int *pocet_zaznamov) 
 { 
    	char subs[55], doms[55];
-   	int i, wish;
-   	struct Node* temp = *head_ref;
-   	struct Node* freepop;
+   	int i;
+   	struct Node* prev = *head_ref;
+   	struct Node* curr;
    	
-	if (*head_ref == NULL) 
-    return;
-  	scanf("%s %d",subs,&wish);
-    if(wish<=(*pocet_zaznamov))
-    {
+	if (*head_ref == NULL) return;
+  	scanf("%s",subs);
 	strupr(subs);  
 	strcpy(doms,(*head_ref)->znacka);
   	strupr(doms);
-  	printf("%s\n",subs);
-	if(strstr(doms,subs) && wish==1)
+	if(strstr(doms,subs))
   	{
   		*head_ref=(*head_ref)->next;
-  		free(temp);
+  		free(prev);
   		(*pocet_zaznamov)--;
-  		return;
+  		//return;
 	}
+	  prev = (*head_ref);
+	  curr = prev->next;
 	
-  	for(i=1;i<wish-1;i++)
-  		temp=temp->next;
-
-  	printf("%s\n",temp->znacka);
-  	strcpy(doms,temp->next->znacka);
-  	strupr(doms);
-  	if(strstr(doms,subs)!=NULL)
-  		{
-  		freepop=temp->next;
-		temp->next=freepop->next;
-		free(freepop);
-		(*pocet_zaznamov)--;
-		}
-	}
+	  while (curr != NULL) {
+	  	strcpy(doms,curr->znacka);
+  		strupr(doms);
+	    if(strstr(doms,subs)){
+	      prev->next = curr->next;  // Will be NULL at the end of the list.
+	      free(curr);
+	      curr = prev->next;
+	    } else {
+	      prev = curr;
+	      curr = curr->next;
+	    }
+	  }
 }
 
 void h(struct Node *node) 
@@ -268,7 +299,8 @@ int main()
 	while(w==1)
 	{
 		scanf("%s",hs);
-		if(hs[0]=='p') push(&head, f, &pocet_zaznamov); 
+		if(hs[0]=='n') push(&head, f, &pocet_zaznamov);
+		if(hs[0]=='p') add(&head, &pocet_zaznamov);  
 		if(hs[0]=='v') printList(head);
 		if(hs[0]=='h') h(head);
 		if(hs[0]=='a') a(&head);
