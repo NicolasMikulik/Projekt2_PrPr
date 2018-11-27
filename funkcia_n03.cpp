@@ -225,12 +225,12 @@ void h(struct zaznam *zaznam)
   			if(wish>=(aktualny->cena))
 			{
 		    	printf("%d.\n", ++i);
-		    	printf("%s\n", aktualny->kategoria);
-		    	printf("%s\n", aktualny->znacka);
-		    	printf("%s\n", aktualny->predajca);
-		        printf("%d\n", aktualny->cena);
-				printf("%d\n", aktualny->vyrobene);
-				printf("%s\n", aktualny->stav);
+		    	printf("kategoria: %s\n", aktualny->kategoria);
+		    	printf("znacka: %s\n", aktualny->znacka);
+		    	printf("predajca: %s\n", aktualny->predajca);
+		        printf("cena: %d\n", aktualny->cena);
+				printf("rok_vyroby: %d\n", aktualny->vyrobene);
+				printf("stav_vozidla: %s\n", aktualny->stav);  
 				check=1;
 			}
         aktualny = aktualny->next; 
