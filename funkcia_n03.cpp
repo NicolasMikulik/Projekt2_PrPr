@@ -120,12 +120,22 @@ void add(struct Node **head_ref, int *pocet_zaznamov)
 						current=current->next;
 					struct Node* new_node = (struct Node*) malloc(sizeof(struct Node)); 
 				
-				strcpy(new_node->kategoria,"KAMION");
-				strcpy(new_node->znacka,"Nissan");
-				strcpy(new_node->predajca,"Negatron's landfill");
-				new_node->cena=13400;
-				new_node->vyrobene=2011;
-				strcpy(new_node->stav,"vyrobene zo sopecneho kamena");
+					fgets(s,200,stdin);
+					fgets(s,200,stdin);
+					s[strlen(s)-1]='\0';
+					strcpy(new_node->kategoria,s);
+					fgets(s,200,stdin);
+					s[strlen(s)-1]='\0';
+					strcpy(new_node->znacka,s);
+					fgets(s,200,stdin);
+					s[strlen(s)-1]='\0';
+					strcpy(new_node->predajca,s);
+					scanf("%d",&new_node->cena);
+					scanf("%d",&new_node->vyrobene);
+					fgets(s,200,stdin);
+					fgets(s,200,stdin);	
+					if(s[strlen(s)]=='\n')s[strlen(s)-1]='\0';
+					strcpy(new_node->stav,s);
 				
 				new_node->next=current->next;
 				current->next=new_node;
@@ -137,12 +147,22 @@ void add(struct Node **head_ref, int *pocet_zaznamov)
 				{
 				struct Node* new_node = (struct Node*) malloc(sizeof(struct Node)); 
 				
-				strcpy(new_node->kategoria,"KAMION");
-				strcpy(new_node->znacka,"Nissan");
-				strcpy(new_node->predajca,"Negatron's landfill");
-				new_node->cena=13400;
-				new_node->vyrobene=2011;
-				strcpy(new_node->stav,"vyrobene zo sopecneho kamena");
+				fgets(s,200,stdin);
+				fgets(s,200,stdin);
+				s[strlen(s)-1]='\0';
+				strcpy(new_node->kategoria,s);
+				fgets(s,200,stdin);
+				s[strlen(s)-1]='\0';
+				strcpy(new_node->znacka,s);
+				fgets(s,200,stdin);
+				s[strlen(s)-1]='\0';
+				strcpy(new_node->predajca,s);
+				scanf("%d",&new_node->cena);
+				scanf("%d",&new_node->vyrobene);
+				fgets(s,200,stdin);
+				fgets(s,200,stdin);	
+				if(s[strlen(s)]=='\n')s[strlen(s)-1]='\0';
+				strcpy(new_node->stav,s);
 				
 				new_node->next=current->next;
 				current->next=new_node;
@@ -155,47 +175,6 @@ void add(struct Node **head_ref, int *pocet_zaznamov)
 			}
 		}
 	}
-}
-
-void append(struct Node** head_ref, FILE *f) 
-{ 
-    struct Node* new_node = (struct Node*) malloc(sizeof(struct Node)); 
-	struct Node* current;
-	 
-    while ((current = (*head_ref)) != NULL)
-    {
-        (*head_ref) = (*head_ref)->next;
-        free(current);
-    }
-    
-    struct Node *last = *head_ref; 
-
-    char s[51];
-	fseek(f,0,SEEK_SET);
-	while((fgets(s,50,f))!=NULL)
-    {	
-		struct Node* new_node = (struct Node*) malloc(sizeof(struct Node));
-	
-		fgets(s,50,f);
-		s[strlen(s)-1]='\0';
-		strcpy(new_node->kategoria,s);
-		fgets(s,50,f);
-		s[strlen(s)-1]='\0';
-		strcpy(new_node->znacka,s);
-		fgets(s,50,f);
-		s[strlen(s)-1]='\0';
-		strcpy(new_node->predajca,s);
-		fgets(s,50,f);
-		new_node->cena=atoi(s);
-		fgets(s,50,f);
-		new_node->vyrobene=atoi(s);
-		fgets(s,50,f);
-		s[strlen(s)-1]='\0';
-		strcpy(new_node->stav,s);
-		printf("%s\n",new_node->znacka);
-	}
-     
-    return; 
 }
   
 /* Given a reference (pointer to pointer) to the head of a list 
@@ -267,20 +246,26 @@ void h(struct Node *node)
 
 void a(struct Node **node) 
 { 
-	struct Node *current=*node;
+	struct Node *current=(*node);
 	int i=0, rok;
 	char subs[55], doms[55];
+	
 	scanf("%s",subs);
     strupr(subs);
 	scanf("%d",&rok);
+	
     while (current != NULL) 
     { 
     	strcpy(doms,current->znacka);
   		strupr(doms);
   		printf("%s\n",doms);
   		if(strstr(doms,subs)!=NULL)
-  			if(rok=(current->vyrobene))
-				current->cena-=100;
+  		{
+  			if(rok==(current->vyrobene))
+  			{
+				current->cena-=100;  				
+			}
+		}
         current = current->next; 
     }
     printf("\n");
