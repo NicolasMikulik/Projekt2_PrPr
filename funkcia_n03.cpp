@@ -5,12 +5,12 @@
 // A linked list node 
 struct Node 
 { 
-    char kategoria[51];
-	char znacka[51];
-	char predajca[51];
+    char kategoria[52];
+	char znacka[52];
+	char predajca[102];
     int cena;
     int vyrobene;
-    char stav[51];
+    char stav[202];
     struct Node *next; 
 }; 
   
@@ -21,7 +21,7 @@ void push(struct Node** head_ref, FILE *f, int *pocet_zaznamov)
 	struct Node *current = NULL;
 	
 	if((f=fopen("auta.txt","r"))==NULL)
-	{printf("Nepodarilo sa otvorit subor.\n");
+	{printf("Zaznamy neboli nacitane.\n");
 	exit(0);}
 	(*pocet_zaznamov)=0;
     while ((current = (*head_ref)) != NULL)
@@ -51,7 +51,7 @@ void push(struct Node** head_ref, FILE *f, int *pocet_zaznamov)
 		fgets(s,50,f);
 		new_node->vyrobene=atoi(s);
 		fgets(s,50,f);
-		s[strlen(s)-1]='\0';
+		if(s[strlen(s)]=='\n')s[strlen(s)-1]='\0';
 		strcpy(new_node->stav,s);
 		printf("%s\n",new_node->znacka);
 	 	new_node->next=NULL;
@@ -78,20 +78,32 @@ void push(struct Node** head_ref, FILE *f, int *pocet_zaznamov)
 void add(struct Node **head_ref, int *pocet_zaznamov) 
 {
 	int poz,i=1;
+	char s[202];
 	struct Node* current=(*head_ref);
 	
 	scanf("%d",&poz);
-	if((*pocet_zaznamov)>0 && poz<=(*pocet_zaznamov)+1)
+	if((*pocet_zaznamov)>0 && poz>0)
 	{
 		if(poz==1)
 		{
 			struct Node* new_node = (struct Node*) malloc(sizeof(struct Node)); 
-			strcpy(new_node->kategoria,"KAMION");
-			strcpy(new_node->znacka,"Audi");
-			strcpy(new_node->predajca,"Optimist Prime's Machine Boogaloo");
-			new_node->cena=15500;
-			new_node->vyrobene=2005;
-			strcpy(new_node->stav,"spalene ohnom ohnivo rychle");
+			fgets(s,200,stdin);
+			fgets(s,200,stdin);
+			s[strlen(s)-1]='\0';
+			strcpy(new_node->kategoria,s);
+			fgets(s,200,stdin);
+			s[strlen(s)-1]='\0';
+			strcpy(new_node->znacka,s);
+			fgets(s,200,stdin);
+			s[strlen(s)-1]='\0';
+			strcpy(new_node->predajca,s);
+			scanf("%d",&new_node->cena);
+			scanf("%d",&new_node->vyrobene);
+			fgets(s,200,stdin);
+			fgets(s,200,stdin);	
+			if(s[strlen(s)]=='\n')s[strlen(s)-1]='\0';
+			strcpy(new_node->stav,s);
+			
 			new_node->next=(*head_ref);
 			(*head_ref)=new_node;
 			(*pocet_zaznamov)++;
@@ -101,6 +113,26 @@ void add(struct Node **head_ref, int *pocet_zaznamov)
 		{
 			while(current!=NULL)
 			{
+				if(poz>(*pocet_zaznamov))
+				{
+					current = (*head_ref);
+					while(current->next!=NULL)
+						current=current->next;
+					struct Node* new_node = (struct Node*) malloc(sizeof(struct Node)); 
+				
+				strcpy(new_node->kategoria,"KAMION");
+				strcpy(new_node->znacka,"Nissan");
+				strcpy(new_node->predajca,"Negatron's landfill");
+				new_node->cena=13400;
+				new_node->vyrobene=2011;
+				strcpy(new_node->stav,"vyrobene zo sopecneho kamena");
+				
+				new_node->next=current->next;
+				current->next=new_node;
+				(*pocet_zaznamov)++;
+				printf("Zaznam pridany na poziciu %d \n",(*pocet_zaznamov));
+				break;
+				}
 				if((poz-1)==i++)
 				{
 				struct Node* new_node = (struct Node*) malloc(sizeof(struct Node)); 
@@ -263,12 +295,12 @@ void printList(struct Node *node)
     while (current != NULL) 
     { 
     	printf("%d.\n", ++i);
-    	printf("%s\n", current->kategoria);
-    	printf("%s\n", current->znacka);
-    	printf("%s\n", current->predajca);
-        printf("%d\n", current->cena);
-		printf("%d\n", current->vyrobene);
-		printf("%s\n", current->stav);  
+    	printf("kategoria: %s\n", current->kategoria);
+    	printf("znacka: %s\n", current->znacka);
+    	printf("predajca: %s\n", current->predajca);
+        printf("cena: %d\n", current->cena);
+		printf("rok_vyroby: %d\n", current->vyrobene);
+		printf("stav_vozidla: %s\n", current->stav);  
         current = current->next; 
     }
     printf("\n");
