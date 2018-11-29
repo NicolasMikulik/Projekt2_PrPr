@@ -206,7 +206,9 @@ void vymaz_zaznam(struct zaznam **zaciatok, int *pocet_zaznamov)
    	struct zaznam* aktualny;
    	
 	if (*zaciatok == NULL) return;
-  	scanf("%s",podstring);
+	fgets(podstring, 100, stdin);
+	fgets(podstring, 100, stdin);
+	podstring[strlen(podstring)-1]='\0';
 	strupr(podstring);  
 
 	while(strstr(strupr(strcpy(hlavny,(*zaciatok)->znacka)),podstring)!=NULL)
@@ -245,14 +247,16 @@ void h(struct zaznam *zaznam)
 	struct zaznam *aktualny=zaznam;
 	int i=0, wish, check=0;
 	char podstring[102], hlavny[102];
-	scanf("%s",podstring);
+	fgets(podstring, 100, stdin);
+	fgets(podstring, 100, stdin);
+	podstring[strlen(podstring)-1]='\0';
     strupr(podstring);
 	scanf("%d",&wish);
     while (aktualny != NULL) 
     { 
     	strcpy(hlavny,aktualny->znacka);
   		strupr(hlavny);
-  		if(strstr(hlavny,podstring))
+  		if(strcmp(hlavny,podstring)==0)
   			if(wish>=(aktualny->cena))
 			{
 		    	printf("%d.\n", ++i);
@@ -274,8 +278,9 @@ void a(struct zaznam **zaznam)
 	struct zaznam *aktualny=(*zaznam);
 	int i=0, rok, upravene=0;
 	char podstring[102], hlavny[102];
-	
-	scanf("%s",podstring);
+	fgets(podstring, 100, stdin);
+	fgets(podstring, 100, stdin);
+	podstring[strlen(podstring)-1]='\0';
     strupr(podstring);
 	scanf("%d",&rok);
 	
@@ -283,8 +288,7 @@ void a(struct zaznam **zaznam)
     { 
     	strcpy(hlavny,aktualny->znacka);
   		strupr(hlavny);
-  		printf("%s\n",hlavny);
-  		if(strstr(hlavny,podstring)!=NULL)
+  		if(strcmp(hlavny,podstring)==0)
   		{
   			if(rok==(aktualny->vyrobene))
   			{
