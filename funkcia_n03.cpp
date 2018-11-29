@@ -13,7 +13,7 @@ struct zaznam
     struct zaznam *next; 
 }; 
   
-void push(struct zaznam	**zaciatok, FILE *f, int *pocet_zaznamov) 
+void nacitaj(struct zaznam	**zaciatok, FILE *f, int *pocet_zaznamov) 
 { 
 	struct zaznam *aktualny=NULL;
 	
@@ -27,26 +27,26 @@ void push(struct zaznam	**zaciatok, FILE *f, int *pocet_zaznamov)
         free(aktualny);
     }
     aktualny=(*zaciatok);
-	char s[51];
+	char s[202];
 	fseek(f,0,SEEK_SET);
-	while((fgets(s,50,f))!=NULL)
+	while((fgets(s,202,f))!=NULL)
     {	
 		struct zaznam* novy_zaznam = (struct zaznam*) malloc(sizeof(struct zaznam));
 		(*pocet_zaznamov)++;
-		fgets(s,50,f);
+		fgets(s,202,f);
 		s[strlen(s)-1]='\0';
 		strcpy(novy_zaznam->kategoria,s);
-		fgets(s,50,f);
+		fgets(s,202,f);
 		s[strlen(s)-1]='\0';
 		strcpy(novy_zaznam->znacka,s);
-		fgets(s,50,f);
+		fgets(s,202,f);
 		s[strlen(s)-1]='\0';
 		strcpy(novy_zaznam->predajca,s);
-		fgets(s,50,f);
+		fgets(s,202,f);
 		novy_zaznam->cena=atoi(s);
-		fgets(s,50,f);
+		fgets(s,202,f);
 		novy_zaznam->vyrobene=atoi(s);
-		fgets(s,50,f);
+		fgets(s,202,f);
 		if(s[strlen(s)]=='\n')s[strlen(s)-1]='\0';
 		strcpy(novy_zaznam->stav,s);
 	 	novy_zaznam->next=NULL;
@@ -65,14 +65,15 @@ void push(struct zaznam	**zaciatok, FILE *f, int *pocet_zaznamov)
 	printf("Nacitalo sa %d zaznamov.\n", (*pocet_zaznamov));
 } 
 
-void add(struct zaznam **zaciatok, int *pocet_zaznamov) 
+void pridaj(struct zaznam **zaciatok, int *pocet_zaznamov) 
 {
 	int poz,i=1;
 	char s[202];
-	struct zaznam* aktualny=(*zaciatok);
 	
+	if((*pocet_zaznamov)==0) *zaciatok=(struct zaznam*) malloc(sizeof(struct zaznam));
+	struct zaznam* aktualny=(*zaciatok);
 	scanf("%d",&poz);
-	if((*pocet_zaznamov)>0 && poz>0)
+	if(poz>0)
 	{
 		if(poz==1)
 		{
@@ -95,6 +96,7 @@ void add(struct zaznam **zaciatok, int *pocet_zaznamov)
 			strcpy(novy_zaznam->stav,s);
 			
 			novy_zaznam->next=(*zaciatok);
+
 			(*zaciatok)=novy_zaznam;
 			(*pocet_zaznamov)++;
 			//printf("Zaznam pridany na poziciu %d \n",i);
@@ -105,6 +107,35 @@ void add(struct zaznam **zaciatok, int *pocet_zaznamov)
 			{
 				if(poz>(*pocet_zaznamov))
 				{
+					if((*pocet_zaznamov)<1)
+					{
+						
+						struct zaznam* novy_zaznam = (struct zaznam*) malloc(sizeof(struct zaznam)); 
+						fgets(s,200,stdin);
+						fgets(s,200,stdin);
+						s[strlen(s)-1]='\0';
+						strcpy(novy_zaznam->kategoria,s);
+						printf("%s",novy_zaznam->kategoria);
+						fgets(s,200,stdin);
+						s[strlen(s)-1]='\0';
+						strcpy(novy_zaznam->znacka,s);
+						fgets(s,200,stdin);
+						s[strlen(s)-1]='\0';
+						strcpy(novy_zaznam->predajca,s);
+						scanf("%d",&novy_zaznam->cena);
+						scanf("%d",&novy_zaznam->vyrobene);
+						fgets(s,200,stdin);
+						fgets(s,200,stdin);	
+						if(s[strlen(s)]=='\n')s[strlen(s)-1]='\0';
+						strcpy(novy_zaznam->stav,s);
+						
+						//novy_zaznam->next=NULL;
+						novy_zaznam->next=(*zaciatok);
+						(*zaciatok)=novy_zaznam;
+						(*zaciatok)->next=NULL;
+						(*pocet_zaznamov)++;
+						break;
+					}
 					aktualny = (*zaciatok);
 					while(aktualny->next!=NULL)
 						aktualny=aktualny->next;
@@ -264,10 +295,10 @@ void a(struct zaznam **zaznam)
 		}
         aktualny = aktualny->next; 
     }
-    printf("Aktualizovalo sa %d zaznamov,\n", upravene);
+    printf("Aktualizovalo sa %d zaznamov\n", upravene);
 } 
 
-void printList(struct zaznam *zaciatok) 
+void vypis(struct zaznam *zaciatok) 
 { 
 	struct zaznam *aktualny=zaciatok;
 	int i=0;
@@ -301,7 +332,7 @@ void ukonci(struct zaznam *zaciatok, FILE *f, int *w)
  
 int main() 
 { 
-    struct zaznam* zaciatok = NULL, *novy_zaznam=NULL; 
+    struct zaznam	*zaciatok = NULL; 
     FILE *f=NULL;
     char hs[5];
     int w=1, pocet_zaznamov=0;
@@ -309,9 +340,9 @@ int main()
 	while(w==1)
 	{
 		scanf("%s",hs);
-		if(hs[0]=='n') push(&zaciatok, f, &pocet_zaznamov);
-		if(hs[0]=='p') add(&zaciatok, &pocet_zaznamov);  
-		if(hs[0]=='v') printList(zaciatok);
+		if(hs[0]=='n') nacitaj(&zaciatok, f, &pocet_zaznamov);
+		if(hs[0]=='p') pridaj(&zaciatok, &pocet_zaznamov);  
+		if(hs[0]=='v') vypis(zaciatok);
 		if(hs[0]=='h') h(zaciatok);
 		if(hs[0]=='a') a(&zaciatok);
 		if(hs[0]=='z') vymaz_zaznam(&zaciatok, &pocet_zaznamov);
